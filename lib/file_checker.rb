@@ -1,8 +1,8 @@
 require './lib/file_reader'
 
-def file_array
+def check_file(filepath = nil)
   open = ReadFile.new('./bad_code.rb')
-  # open = ReadFile.new(gets.chomp)
+  # open = ReadFile.new(filepath)
   scan_file = open.file_to_check
   contents_array = []
   empty_lines = []
@@ -47,9 +47,9 @@ def file_array
         if each_line[ind-1].include?("\n") && !each_line[ind-1].match?(/\w+/)
           puts "error at line #{ind}: extra line detected".white
         end
-        if each_line[ind+1].include?("\n") && !each_line[ind+1].match?(/\w+/)
-          puts "error at line #{ind+2}: missing empty line".red
-        end
+        # if each_line[ind+1].include?("\n") && !each_line[ind+1].match?(/\w+/)
+        #   puts "error at line #{ind+2}: missing empty line".red
+        # end
       end
     end
       
