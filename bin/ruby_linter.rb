@@ -1,11 +1,11 @@
 require './lib/file_checker'
 require 'colorize'
 
-puts "Hello! This is a simple linter for Ruby".bold
+puts 'Hello! This is a simple linter for Ruby'.bold
 sleep(1)
-puts "It will scan for whitespace errors, empty line errors, indentation errors, and closing tag errors".bold
+puts 'It will scan for whitespace errors, empty line errors, indentation errors, and closing tag errors'.bold
 sleep(1)
-puts "Please enter the relative path of the file you would like to lint.".bold
+puts 'Please enter the relative path of the file you would like to lint.'.bold
 sleep(1)
 
 # file_path = gets.chomp
@@ -35,5 +35,5 @@ check_for_errors
 #   # sleep(@error_hash[:closing_errors].length)
 #   puts "#{@error_hash[:tag_errors].length} tag errors found on the following lines".magenta#.bold
 #   puts @error_hash[:tag_errors]
-# 
+#
 # end
