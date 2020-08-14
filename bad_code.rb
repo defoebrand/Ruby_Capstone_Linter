@@ -1,4 +1,6 @@
 Class Bugs
+def moth
+  
   def  spider 
    end
   
@@ -7,7 +9,6 @@ Class Bugs
   p "I'm a pill bug"  
 
   end
-
   def ant
         p "I am mighty!"
   end
@@ -18,4 +19,4 @@ Class Bugs
   end
   end
 end
-
+#current code requires two empty lines at end of code - fix this
