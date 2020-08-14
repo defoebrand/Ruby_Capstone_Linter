@@ -2,10 +2,8 @@ require './lib/file_reader'
 require 'colorize'
 require 'pry'
 
-def check_for_errors(_filepath = nil)
-  # @current_file = LintFile.new(filepath)
-  # @current_file = LintFile.new('./good_code.rb')
-  @current_file = LintFile.new('./bad_code.rb')
+def check_for_errors(filepath = nil)
+  @current_file = LintFile.new(filepath)
   @current_file.read_lines
   @error_hash = {
     line_nums: {},

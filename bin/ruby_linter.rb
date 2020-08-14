@@ -8,9 +8,11 @@ sleep(1)
 puts 'Please enter the relative path of the file you would like to lint.'.bold
 sleep(1)
 
-# file_path = gets.chomp
-# check_for_errors(file_path)
-check_for_errors
+# filepath = gets.chomp
+# filepath = './good_code.rb'
+filepath = './bad_code.rb'
+check_for_errors(filepath)
+# check_for_errors
 
 # puts "#{@error_hash[:line_nums].keys[0]}: #{@error_hash[:line_nums].values[0]}" #[:errors]
 # puts @error_hash[:line_nums]#["Line 3"].class
