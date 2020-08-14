@@ -1,51 +1,119 @@
 require './lib/file_reader'
+require 'colorize'
 require 'pry'
 
-def check_file(filepath = nil)
-  open = ReadFile.new('./bad_code.rb')
-  # open = ReadFile.new('./good_code.rb')
-  # open = ReadFile.new(filepath)
-  scan_file = open.file_to_check
-  contents_array = []
-  error_array = []
+def check_for_errors(filepath = nil)
+  # current_file = LintFile.new(filepath)
+  # current_file = LintFile.new('./good_code.rb')
+  current_file = LintFile.new('./bad_code.rb')
+  @error_hash = {
+    :line_nums => {},
+    :errors => {:whitespace_errors => [],
+    :empty_line_errors => [],
+    :lineentation_errors => [],
+    :closing_errors => [],
+    :tag_errors => []}
+  }
   
-  scan_file.each_with_index do |line, ind|
-    contents_array[ind] = StringScanner.new(line)
-    # puts line
-    # sleep(1)
-  end
+  current_file.read_lines
   
+  current_file.file_lines.length.times do |line|
+     if current_file.file_lines[line].rest.include?("\n") && !current_file.file_lines[line].rest.match?(/\w+/)
+       if  current_file.file_lines[line-1].rest.include?("\n") && !current_file.file_lines[line-1].rest.match?(/\w+/)
+         puts "error at line #{line + 1}: extra line detected".cyan
+       end
+     end    
+     if current_file.file_lines[line].rest[-2] == " "
+       puts "error at line #{line + 1}: trailing whitespace detected".magenta
+     end
+     if current_file.file_lines[line].rest.match?(/\w+\s\s\w+/)
+       puts "error at line #{line + 1}: excess whitespace detected".yellow
+     end
+     if current_file.file_lines[line].rest.match?(/^\s*def/)
+       unless current_file.file_lines[line+1].rest.match(/^\s{2}\w+/)
+         puts "error at line #{line+2}: improper line indentation detected".green
+       end
+       if current_file.file_lines[line+1].rest.include?("\n") && !current_file.file_lines[line+1].rest.match?(/\w+/)
+         puts "error at line #{line+2}: extra line detected".blue
+       end
+     end
+     if current_file.file_lines[line].rest.match?(/^[#\s]*end$/)
+       if current_file.file_lines[line-1].rest.include?("\n") && !current_file.file_lines[line-1].rest.match?(/\w+/)
+         puts "error at line #{line}: extra line detected".white
+       end
+       if current_file.file_lines[line+1].rest.include?("\n") && current_file.file_lines[line+1].rest.match?(/\w+/) && !current_file.file_lines[line+1].rest.match?(/^[#\s]*end$/)
+         puts "error at line #{line+1}: missing empty line".red
+       end
+     end
+   end
+   
 
-    contents_array.length.times do |ind|
-      if contents_array[ind].rest.include?("\n") && !contents_array[ind].rest.match?(/\w+/)
-        if  contents_array[ind-1].rest.include?("\n") && !contents_array[ind-1].rest.match?(/\w+/)
-          puts "error at line #{ind + 1}: extra line detected".cyan
-        end
-      end    
-      if contents_array[ind].rest[-2] == " "
-        puts "error at line #{ind + 1}: trailing whitespace detected".magenta
-      end
-      if contents_array[ind].rest.match?(/\w+\s\s\w+/)
-        puts "error at line #{ind + 1}: excess whitespace detected".yellow
-      end
-      if contents_array[ind].rest.match?(/^\s*def/)
-        unless contents_array[ind+1].rest.match(/^\s{2}\w+/)
-          puts "error at line #{ind+2}: improper indentation detected".green
-        end
-        if contents_array[ind+1].rest.include?("\n") && !contents_array[ind+1].rest.match?(/\w+/)
-          puts "error at line #{ind+2}: extra line detected".blue
-        end
-      end
-      if contents_array[ind].rest.match?(/^[#\s]*end$/)
-        if contents_array[ind-1].rest.include?("\n") && !contents_array[ind-1].rest.match?(/\w+/)
-          puts "error at line #{ind}: extra line detected".white
-        end
-        if contents_array[ind+1].rest.include?("\n") && contents_array[ind+1].rest.match?(/\w+/) && !contents_array[ind+1].rest.match?(/^[#\s]*end$/)
-          puts "error at line #{ind+1}: missing empty line".red
-        end
-      end
-    end
-      
-      
-  end
+    # current_file.file_lines.length.times do |line|
+    # 
+    #   if current_file.file_lines[line].rest.include?("\n") && !current_file.file_lines[line].rest.match?(/\w+/)
+    # 
+    #     if  current_file.file_lines[line-1].rest.include?("\n") && !current_file.file_lines[line-1].rest.match?(/\w+/)
+    #       # @error
+    #       @error_hash[:errors][:empty_line_errors] << "Error at line #{line + 1}: #{current_file.file_lines[line+1].scan_until(/\s$/)}" #adjust regex
+    #     end
+    #   end    
+    # 
+    # 
+    #   if current_file.file_lines[line].rest[-2] == " "
+    #     @error_hash[:line_nums]["Line #{line + 1}"] = ['whitespace error: ' + "#{current_file.file_lines[line+1].scan_until(/\s$/)}"]
+    #     @error_hash[:errors][:whitespace_errors] << "Error at line #{line + 1}: #{current_file.file_lines[line+1].scan_until(/\s$/)}" #adjust regex
+    #   end
+    # 
+    # 
+    #   if current_file.file_lines[line].rest.match?(/\w+\s\s\w+/)
+    # 
+    #     @error_hash[:errors][:whitespace_errors] << "Error at line #{line + 1}: #{current_file.file_lines[line+1].scan_until(/\s$/)}".magenta #adjust regex
+    #   end
+    # 
+    # 
+    #   if current_file.file_lines[line].rest.match?(/^\s*def/)
+    # 
+    # 
+    #     unless current_file.file_lines[line+1].rest.match(/^\s{2}\w+/)
+    #         @error_hash[:line_nums]["Line #{line + 2}"] = 'lineentation error: ' + "#{current_file.file_lines[line+2].scan_until(/\s$/)}"
+    # 
+    #       @error_hash[:errors][:lineentation_errors] << "Error at line #{line + 2}:".red + "#{current_file.file_lines[line+2].scan_until(/\s$/)}".yellow #adjust regex
+    #     end
+    # 
+    # 
+    #     if current_file.file_lines[line+1].rest.include?("\n") && !current_file.file_lines[line+1].rest.match?(/\w+/)
+    # 
+    #       @error_hash[:errors][:empty_line_errors] << "Error at line #{line + 2}:".blue + "#{current_file.file_lines[line+2].scan_until(/\s$/)}".yellow #adjust regex
+    #     end
+    # 
+    # 
+    #   end
+    # 
+    # 
+    #   if current_file.file_lines[line].rest.match?(/^[#\s]*end$/)
+    # 
+    # 
+    #     if current_file.file_lines[line-1].rest.include?("\n") && !current_file.file_lines[line-1].rest.match?(/\w+/)
+    # 
+    #       @error_hash[:errors][:empty_line_errors] << "Error at line #{line}: #{current_file.file_lines[line].scan_until(/\s$/)}" #adjust regex
+    #     end
+    # 
+    # 
+    #     if current_file.file_lines[line+1].rest.include?("\n") && current_file.file_lines[line+1].rest.match?(/\w+/) && !current_file.file_lines[line+1].rest.match?(/^[#\s]*end$/)
+    # 
+    #       @error_hash[:errors][:empty_line_errors] << "Error at line #{line + 1}: #{current_file.file_lines[line+1].scan_until(/\s$/)}" #adjust regex
+    #     end
+    # 
+    # 
+    #   end
+    # 
+    # 
+    # end
 
+
+end
+
+
+# def empty_line?(line)
+#   if line.
+# end

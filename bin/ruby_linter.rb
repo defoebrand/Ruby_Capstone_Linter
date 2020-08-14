@@ -1,43 +1,39 @@
 require './lib/file_checker'
 require 'colorize'
 
-puts "Hello!"
-puts "Please enter the relative path of the file you would like to check."
+puts "Hello! This is a simple linter for Ruby".bold
+sleep(1)
+puts "It will scan for whitespace errors, empty line errors, indentation errors, and closing tag errors".bold
+sleep(1)
+puts "Please enter the relative path of the file you would like to lint.".bold
+sleep(1)
 
 # file_path = gets.chomp
-# check_file(file_path)
-check_file
-# if check_file(file_path).length == 0
-#  puts "Congratulations! No errors were detected".black.on_white
+# check_for_errors(file_path)
+check_for_errors
+
+# puts "#{@error_hash[:line_nums].keys[0]}: #{@error_hash[:line_nums].values[0]}" #[:errors]
+# puts @error_hash[:line_nums]#["Line 3"].class
+
+# if @error_hash.values.flatten.length == 0
+#  puts " Congratulations! No errors were detected ".black.on_white
 # else
-#  show errors
-#  
+#   puts " A total of #{@error_hash.values.flatten.length} total errors found on the following lines ".black.on_white
+#   sleep(1)
+#   puts "#{@error_hash[:whitespace_errors].length} whitespace errors found on the following lines".magenta#.bold
+#   puts @error_hash[:whitespace_errors]
+#   # sleep(@error_hash[:whitespace_errors].length)
+#   puts "#{@error_hash[:empty_line_errors].length} empty line errors found on the following lines".magenta#.bold
+#   puts @error_hash[:empty_line_errors]
+#   # puts "#{@error_hash[:empty_line_errors]}".magenta
+#   # sleep(@error_hash[:empty_line_errors].length)
+#   puts "#{@error_hash[:indentation_errors].length} indentation errors found on the following lines".magenta#.bold
+#   puts @error_hash[:indentation_errors]
+#   # sleep(@error_hash[:indentation_errors].length)
+#   puts "#{@error_hash[:closing_errors].length} closing errors found on the following lines".magenta#.bold
+#   puts @error_hash[:closing_errors]
+#   # sleep(@error_hash[:closing_errors].length)
+#   puts "#{@error_hash[:tag_errors].length} tag errors found on the following lines".magenta#.bold
+#   puts @error_hash[:tag_errors]
+# 
 # end
-
-# if trailing_whitespace
-#   puts "trailing whitespace"
-# elsif excess_whitespace
-#   puts "excess whitespace"
-# elsif
-
-
-# puts "#{errors_array.length} total errors found"
-# sleep(1)
-# puts "#{whitespace_errors.length} errors found on the following lines"
-# display whitespace lines
-# sleep(1)
-# puts "#{empty_line_errors.length} errors found on the following lines"
-# display empty_line_errors lines
-# sleep(1)
-# puts "#{indentation_errors.length} errors found on the following lines"
-# display indentation_errors lines
-# sleep(1)
-# puts "#{closing_errors.length} errors found on the following lines"
-# display closing_errors lines
-# sleep(1)
-# puts "#{tag_errors.length} errors found on the following lines"
-# display tag_errors lines
-# sleep(1)
-# 
-# 
-
