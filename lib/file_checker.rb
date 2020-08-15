@@ -24,7 +24,7 @@ def check_for_errors(filepath = nil)
     check_whitespaces(line_num)
     check_for_extra_lines(line_num)
     check_for_missing_lines(line_num)
-    capture_block(line_num)
+    # capture_block(line_num)
 
     # check_indentation(line_num)
     check_tags(line_num)
@@ -34,6 +34,7 @@ end
 def check_whitespaces(line_num)
   if @current_file.file_lines[line_num].rest.match?(/\S/)
     if @current_file.file_lines[line_num].rest.match?(/\s{1,}\n/)
+
       puts "error at line #{line_num + 1}: trailing whitespace detected".magenta
     end
   end
@@ -83,10 +84,10 @@ def check_indentation(line_num = nil)
     if !@current_file.file_lines[line_num].rest.match?(/^\s{2}\w+/) == true
       p @current_file.file_lines[line_num].rest # .split('')
       p !@current_file.file_lines[line_num].rest.match?(/^\s{2}\w+/)
-      p "error at line #{line_num + 1}" unless line_num == @current_file.file_lines.length - 1
+      puts "error at line #{line_num + 1}".magenta unless line_num == @current_file.file_lines.length - 1
     end
   elsif !@current_file.file_lines[line_num].rest.match?(/^\s{4}\w+/) == true
-    p "error at line #{line_num + 1}"
+    puts "error at line #{line_num + 1}".magenta
   end
   # if @current_file.file_lines[line_num].rest.match?(/\w+/) &&
   #    !@current_file.file_lines[line_num].rest.match?(/\bend\b/)
@@ -153,7 +154,33 @@ def end_def_block(line_num)
   end
 end
 
-def check_tags(line_num); end
+def check_tags(line_num)
+  if @current_file.file_lines[line_num].check_until(/[^\"\']\{[^\"\']/)
+    unless @current_file.file_lines[line_num].check_until(/[^\"\']\}[^\"\']/)
+      puts "error on line #{line_num + 1}: missing '}' detected".magenta
+    end
+  elsif @current_file.file_lines[line_num].check_until(/[^\"\']\}[^\"\']/)
+    unless @current_file.file_lines[line_num].check_until(/[^\"\']\{[^\"\']/)
+      puts "error on line #{line_num + 1}: missing '{' detected".magenta
+    end
+  elsif @current_file.file_lines[line_num].check_until(/[^\"\']\[[^\"\']/)
+    unless @current_file.file_lines[line_num].check_until(/[^\"\']\][^\"\']/)
+      puts "error on line #{line_num + 1}: missing ']' detected".magenta
+    end
+  elsif @current_file.file_lines[line_num].check_until(/[^\"\']\][^\"\']/)
+    unless @current_file.file_lines[line_num].check_until(/[^\"\']\[[^\"\']/)
+      puts "error on line #{line_num + 1}: missing '[' detected".magenta
+    end
+  elsif @current_file.file_lines[line_num].check_until(/[^\"\']\([^\"\']/)
+    unless @current_file.file_lines[line_num].check_until(/[^\"\']\)[^\"\']/)
+      puts "error on line #{line_num + 1}: missing ')' detected".magenta
+    end
+  elsif @current_file.file_lines[line_num].check_until(/[^\"\']\)[^\"\']/)
+    unless @current_file.file_lines[line_num].check_until(/[^\"\']\([^\"\']/)
+      puts "error on line #{line_num + 1}: missing '(' detected".magenta
+    end
+  end
+end
 
 #   # binding.pry
 #   if @found_def == true
