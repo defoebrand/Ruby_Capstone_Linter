@@ -10,8 +10,6 @@ class LintFile
   def read_lines
     @scan_file.each_with_index do |line, ind|
       @file_lines[ind] = StringScanner.new(line)
-      # puts line
-      # sleep(1)
     end
   end
 end
