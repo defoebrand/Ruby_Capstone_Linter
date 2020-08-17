@@ -1,14 +1,14 @@
-require './lib/file_checker'
 require 'colorize'
+require './lib/file_checker'
 
 puts 'Hello! This is a simple linter for Ruby'.bold
-sleep(0.5)
+sleep(0.375)
 puts 'It will scan for whitespace errors, new line errors, indentation errors, and closing tag errors'.bold
-sleep(0.5)
+sleep(0.375)
 puts 'Please enter the relative path of the file you would like to lint.'.bold
-sleep(0.5)
+sleep(0.375)
 
-# @filepath = gets.chomp
+@filepath = gets.chomp
 open_linter(@filepath)
 puts ''
 @errors = @error_hash.values.flatten
@@ -27,7 +27,7 @@ else
     @error_hash.each do |key, value|
       print "    - #{key}".magenta if value.any?(@errors.sort.uniq[ind])
     end
-    sleep(0.5)
+    sleep(0.25)
   end
   puts ''
 end

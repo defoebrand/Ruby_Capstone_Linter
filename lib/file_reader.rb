@@ -14,8 +14,6 @@ class LintFile
   end
 end
 
-@filepath = './bad_code.txt'
-
 @error_hash = {
   'Trailing Whitespace Detected' => [],
   'Excess Whitespace Detected' => [],
@@ -41,10 +39,8 @@ end
 
 @reserved_words = [/def/i, /if/i, /do/i, /class/i]
 
-@timer = 0
-
 @block_start = false
 @block_end = false
 @reserved_word_count = 0
-@block_count = 0
+@nest_count = 0
 @indent = 0
