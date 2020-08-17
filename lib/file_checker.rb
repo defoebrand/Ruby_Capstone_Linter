@@ -39,11 +39,11 @@ def check_for_extra_lines(line_num)
 end
 
 def check_for_missing_lines(line_num)
-  if @current_file.file_lines[line_num].string.match?(/^[#\s]*end/)
-    if @current_file.file_lines[line_num + 1].string.match?(/\w+/) &&
-       !@current_file.file_lines[line_num + 1].string.match?(/^[#\s]*end$/)
-      @error_hash['Missing Empty Line Detected'] << line_num + 1
-    end
+  return unless @current_file.file_lines[line_num].string.match?(/^[#\s]*end/)
+
+  if @current_file.file_lines[line_num + 1].string.match?(/\w+/) &&
+     !@current_file.file_lines[line_num + 1].string.match?(/^[#\s]*end$/)
+    @error_hash['Missing Empty Line Detected'] << line_num + 1
   end
 end
 
@@ -92,16 +92,16 @@ def check_tags(line_num)
 end
 
 def check_capitalization(line_num)
-  if @current_file.file_lines[line_num].check_until(/^\s*\w/)
-    if @reserved_words.any? do |regexp|
-         @current_file.file_lines[line_num].string.gsub(/(["'])(?:(?=(\\?))\2.)*?\1/, '').match?(regexp)
-         @current_file.file_lines[line_num].scan_until(regexp)
-       end
-      if @current_file.file_lines[line_num].matched != @current_file.file_lines[line_num].matched.downcase
-        @error_hash['Incorrect Capitalization of Reserved Word Detected'] << line_num + 1
-      end
+  return unless @current_file.file_lines[line_num].check_until(/^\s*\w/)
 
+  if @reserved_words.any? do |regexp|
+       @current_file.file_lines[line_num].string.gsub(/(["'])(?:(?=(\\?))\2.)*?\1/, '').match?(regexp)
+       @current_file.file_lines[line_num].scan_until(regexp)
+     end
+    if @current_file.file_lines[line_num].matched != @current_file.file_lines[line_num].matched.downcase
+      @error_hash['Incorrect Capitalization of Reserved Word Detected'] << line_num + 1
     end
+
   end
 end
 
@@ -145,19 +145,19 @@ def start_def_block(line_num)
 end
 
 def end_def_block(line_num)
-  if @current_file.file_lines[line_num].string.gsub(/(["'])(?:(?=(\\?))\2.)*?\1/, '').match?(/end/)
-    @block_end = true
-    @block_count -= 1
-    @reserved_word_count -= 1
-    capture_block(line_num + 1) if @block_count.zero?
-  end
+  return unless @current_file.file_lines[line_num].string.gsub(/(["'])(?:(?=(\\?))\2.)*?\1/, '').match?(/end/)
+
+  @block_end = true
+  @block_count -= 1
+  @reserved_word_count -= 1
+  capture_block(line_num + 1) if @block_count.zero?
 end
 
 def delete_double_error(line_num)
-  if @error_hash['Extraneous Empty Line Detected'].include?(line_num - 1)
-    test = @error_hash['Extraneous Empty Line Detected']
-    test.delete_at(@error_hash['Extraneous Empty Line Detected'].index(line_num - 1)) &&
-      test.delete_at(@error_hash['Extraneous Empty Line Detected'].index(line_num))
-    @indent -= 2 if @block_count.zero?
-  end
+  return unless @error_hash['Extraneous Empty Line Detected'].include?(line_num - 1)
+
+  test = @error_hash['Extraneous Empty Line Detected']
+  test.delete_at(@error_hash['Extraneous Empty Line Detected'].index(line_num - 1)) &&
+    test.delete_at(@error_hash['Extraneous Empty Line Detected'].index(line_num))
+  @indent -= 2 if @block_count.zero?
 end
