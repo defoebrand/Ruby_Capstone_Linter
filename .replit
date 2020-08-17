@@ -1,0 +1,2 @@
+language = "ruby"
+run = "bin/ruby_linter.rb"
