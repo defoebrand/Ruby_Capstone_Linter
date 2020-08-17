@@ -14,9 +14,9 @@ class LintFile
   end
 end
 
-@filepath = './bad_code.txt'
+# @filepath = './bad_code.txt'
 # @filepath = './good_code.rb'
-# @filepath = gets.chomp
+@filepath = gets.chomp
 
 @error_hash = {
   'Trailing Whitespace Detected' => [],

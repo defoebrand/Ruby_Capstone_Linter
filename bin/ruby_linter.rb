@@ -13,7 +13,6 @@ puts ''
 @errors = @error_hash.values.flatten
 if @errors.length.zero?
   puts ' Congratulations! No errors were detected '.bold.blue.on_green
-  puts ''
 else
   if @errors.length == 1
     puts " A total of #{@errors.uniq.length} error has been found on the following line ".bold.red.on_light_white
