@@ -1,4 +1,3 @@
-require 'colorize'
 require './lib/file_checker'
 
 puts 'Hello! This is a simple linter for Ruby'
