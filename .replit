@@ -1,2 +1,2 @@
 language = "ruby"
-run = "bin/ruby_linter.rb"
+run = "ruby bin/ruby_linter.rb"
