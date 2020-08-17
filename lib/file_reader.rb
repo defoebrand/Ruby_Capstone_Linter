@@ -14,9 +14,7 @@ class LintFile
   end
 end
 
-# @filepath = './bad_code.txt'
-# @filepath = './good_code.rb'
-@filepath = gets.chomp
+@filepath = './bad_code.txt'
 
 @error_hash = {
   'Trailing Whitespace Detected' => [],
@@ -41,7 +39,9 @@ end
   '\[' => '\]'
 }
 
-@reserved_words = [/class/i, /def/i, /if/i, /do/i]
+@reserved_words = [/def/i, /if/i, /do/i, /class/i]
 # @block_word_reg = [/def/i, /if/i, /do/i]
 
 @indent = 0
+
+@timer = 0

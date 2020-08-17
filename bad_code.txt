@@ -1,4 +1,4 @@
- Class Bugs
+  Class Bugs
   test_2 = "hello", "h[owdy", "end"] 
 
   def moth
@@ -9,13 +9,13 @@
     end
   end
   def spider
-  end
+  
   
   def roly_poly
     p "I'm a pill bug"
     test_arr.select { |x| p x 
     test_arr.select  |x| p x}
-  
+
   
   def ant
     p "I am mighty!"
@@ -24,8 +24,8 @@
   def capetillar
     test_arr.count(2
     test_arr.count2)
-    p "I'm a beautiful }! butte]rfly)!"
-  # end
+      p "I'm a beautiful }! butte]rfly)!"
+  #end
 end
 
 #end current code requires two empty lines at end of code - fix this
