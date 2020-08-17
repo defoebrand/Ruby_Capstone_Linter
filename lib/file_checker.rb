@@ -48,15 +48,12 @@ end
 def check_indentation(line_num = nil)
   if @current_file.file_lines[line_num].check_until(/^\s*end/i)
     @indent -= 2
-    @close_block -= 1
+    # @close_block -= 1
     if @current_file.file_lines[line_num].scan_until(/^\s*/).split('').count != @indent
       @error_hash['Indentation Error Detected'] << line_num + 1
     end
   elsif @current_file.file_lines[line_num].check_until(/^\s*\w/)
     check_for_reserved_words(line_num)
-  end
-  if line_num + 1 == @current_file.file_lines.length
-    @error_hash['Missing Final Closing Statement Detected'] << line_num + 1 if @indent != @open_block + @close_block
   end
 end
 
@@ -69,7 +66,7 @@ def check_for_reserved_words(line_num)
         @error_hash['Indentation Error Detected'] << line_num + 1
       end
       @indent += 2
-      @open_block += 1
+      # @open_block += 1
       break
     elsif @current_file.file_lines[line_num].reset.scan_until(/^\s*/).length != @indent
       @error_hash['Indentation Error Detected'] << line_num + 1
@@ -92,6 +89,10 @@ def check_tags(line_num)
       end
     end
   end
+
+  if line_num + 1 == @current_file.file_lines.length
+    @error_hash['Missing Final Closing Statement Detected'] << line_num + 1 if @indent != @open_block + @close_block
+  end
 end
 
 def check_capitalization(line_num)
@@ -107,14 +108,22 @@ def check_capitalization(line_num)
   end
 end
 
+@found_def = false
+@found_end = false
+@def_block = []
+
+@open_block = 0
+@close_block = 0
+
 def capture_block(line_num)
   if @found_end == true
     @found_end = false
     @found_def = false
     @def_block = []
-  elsif @reserved_words.any? do |regexp|
-          @current_file.file_lines[line_num].string.gsub(/(["'])(?:(?=(\\?))\2.)*?\1/, '').match?(regexp)
-        end
+  # elsif @reserved_words.any? do |regexp|
+  #         @current_file.file_lines[line_num].string.gsub(/(["'])(?:(?=(\\?))\2.)*?\1/, '').match?(regexp)
+  #       end
+  elsif @current_file.file_lines[line_num].rest.match?(/def/)
     start_def_block(line_num)
   elsif @found_def == true
     end_def_block(line_num)
@@ -123,13 +132,14 @@ end
 
 def start_def_block(line_num)
   if @found_def == true
-    @error_hash['Missing Closing Statement Detected'] << line_num
+    @error_hash['Missing Closing Statement Detected'] << line_num - 1
+    # @indent -= 2
     @found_end = false
     @found_def = false
     @def_block = []
-  elsif @current_file.file_lines[line_num].rest.match?(Regexp.new(@reserved_words[0]))
-    # p 'yay'
-    # p @current_file.file_lines[line_num].rest.match(Regexp.new(@reserved_words[0])).string
+  # elsif @current_file.file_lines[line_num].rest.match?(Regexp.new(@reserved_words[0]))
+  #   # p 'yay'
+  #   # p @current_file.file_lines[line_num].rest.match(Regexp.new(@reserved_words[0])).string
   elsif @current_file.file_lines[line_num].rest.match?(/def/)
     @found_def = true
     @def_block << @current_file.file_lines[line_num].rest

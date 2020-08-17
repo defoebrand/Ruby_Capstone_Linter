@@ -14,16 +14,16 @@ class LintFile
   end
 end
 
-@filepath = './bad_code.rb'
-# filepath = './good_code.rb'
-# filepath = gets.chomp
+@filepath = './bad_code.txt'
+# @filepath = './good_code.rb'
+# @filepath = gets.chomp
 
 @error_hash = {
   'Trailing Whitespace Detected' => [],
   'Excess Whitespace Detected' => [],
   'Extraneous Empty Line Detected' => [],
-  'Indentation Error Detected' => [],
   'Missing Empty Line Detected' => [],
+  'Indentation Error Detected' => [],
   'Missing Closing Statement Detected' => [],
   'Missing Final Closing Statement Detected' => [],
   'Incorrect Capitalization of Reserved Word Detected' => [],
@@ -45,10 +45,3 @@ end
 # @block_word_reg = [/def/i, /if/i, /do/i]
 
 @indent = 0
-
-@found_def = false
-@found_end = false
-@def_block = []
-
-@open_block = 0
-@close_block = 0

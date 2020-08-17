@@ -1,9 +1,9 @@
  Class Bugs
-  test_2 = "hello", "h[owdy", "end"]
+  test_2 = "hello", "h[owdy", "end"] 
 
   def moth
     if test_arr
-      test_arr.length do |x|
+      test_2.length do |x|
         p test_arr[x
       end
     end
@@ -15,7 +15,7 @@
     p "I'm a pill bug"
     test_arr.select { |x| p x 
     test_arr.select  |x| p x}
-  end
+  
   
   def ant
     p "I am mighty!"
