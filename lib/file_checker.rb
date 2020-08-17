@@ -1,10 +1,5 @@
 require './lib/file_reader'
 
-@found_def = false
-@found_end = false
-@res_words = 0
-@blocks = 0
-
 def open_linter(filepath = nil)
   @current_file = LintFile.new(filepath)
   @current_file.read_lines
@@ -21,7 +16,7 @@ def check_for_errors
     check_tags(line_num)
     check_capitalization(line_num)
     if line_num + 1 == @current_file.file_lines.length
-      @error_hash['Missing Final Closing Statement Detected'] << line_num + 1 if @res_words != 0
+      @error_hash['Missing Final Closing Statement Detected'] << line_num + 1 if @reserved_word_count != 0
     end
   end
 end
@@ -31,8 +26,7 @@ def check_whitespaces(line_num)
     if @current_file.file_lines[line_num].string.match?(/\s{1,}\n/)
       @error_hash['Trailing Whitespace Detected'] << line_num + 1
     end
-  end
-  if @current_file.file_lines[line_num].string.match?(/\w+\s{2,}\w+/)
+  elsif @current_file.file_lines[line_num].string.match?(/\w+\s{2,}\w+/)
     @error_hash['Excess Whitespace Detected'] << line_num + 1
   end
 end
@@ -103,7 +97,6 @@ def check_capitalization(line_num)
          @current_file.file_lines[line_num].string.gsub(/(["'])(?:(?=(\\?))\2.)*?\1/, '').match?(regexp)
          @current_file.file_lines[line_num].scan_until(regexp)
        end
-
       if @current_file.file_lines[line_num].matched != @current_file.file_lines[line_num].matched.downcase
         @error_hash['Incorrect Capitalization of Reserved Word Detected'] << line_num + 1
       end
@@ -113,54 +106,58 @@ def check_capitalization(line_num)
 end
 
 def capture_block(line_num)
-  if @found_end == true && @blocks.zero?
-    @found_end = false
-    @found_def = false
+  if @block_end == true && @block_count.zero?
+    @block_end = false
+    @block_start = false
   elsif @reserved_words.any? do |regexp|
           @current_file.file_lines[line_num].string.gsub(/(["'])(?:(?=(\\?))\2.)*?\1/, '').match?(regexp)
         end
-    handle_res_words(line_num)
-  elsif @found_def == true
+    handle_reserved_word_count(line_num)
+  elsif @block_start == true
     end_def_block(line_num)
   end
 end
 
-def handle_res_words(line_num)
+def handle_reserved_word_count(line_num)
   if @current_file.file_lines[line_num].string.gsub(/(["'])(?:(?=(\\?))\2.)*?\1/, '').match?(@reserved_words.last)
-    @res_words += 1
+    @reserved_word_count += 1
   elsif @current_file.file_lines[line_num].string.gsub(/(["'])(?:(?=(\\?))\2.)*?\1/, '').match?(@reserved_words.first)
     start_def_block(line_num)
   else
-    @res_words += 1
-    @blocks += 1
+    @reserved_word_count += 1
+    @block_count += 1
   end
 end
 
 def start_def_block(line_num)
-  if @found_def == true
+  if @block_start == true
     @error_hash['Missing Closing Statement Detected'] << line_num - 1
-    if @error_hash['Extraneous Empty Line Detected'].include?(line_num - 1)
-      test = @error_hash['Extraneous Empty Line Detected']
-      test.delete_at(@error_hash['Extraneous Empty Line Detected'].index(line_num - 1)) &&
-        test.delete_at(@error_hash['Extraneous Empty Line Detected'].index(line_num))
-      @indent -= 2 if @blocks.zero?
-    end
-    @found_end = false
-    @res_words -= 1
-    @blocks -= 1
-    @indent -= 2 if @blocks.zero?
+    delete_double_error(line_num)
+    @block_end = false
+    @reserved_word_count -= 1
+    @block_count -= 1
+    @indent -= 2 if @block_count.zero?
   elsif @current_file.file_lines[line_num].string.gsub(/(["'])(?:(?=(\\?))\2.)*?\1/, '').match?(@reserved_words.first)
-    @found_def = true
-    @blocks += 1
-    @res_words += 1
+    @block_start = true
+    @block_count += 1
+    @reserved_word_count += 1
   end
 end
 
 def end_def_block(line_num)
   if @current_file.file_lines[line_num].string.gsub(/(["'])(?:(?=(\\?))\2.)*?\1/, '').match?(/end/)
-    @found_end = true
-    @blocks -= 1
-    @res_words -= 1
-    capture_block(line_num + 1) if @blocks.zero?
+    @block_end = true
+    @block_count -= 1
+    @reserved_word_count -= 1
+    capture_block(line_num + 1) if @block_count.zero?
+  end
+end
+
+def delete_double_error(line_num)
+  if @error_hash['Extraneous Empty Line Detected'].include?(line_num - 1)
+    test = @error_hash['Extraneous Empty Line Detected']
+    test.delete_at(@error_hash['Extraneous Empty Line Detected'].index(line_num - 1)) &&
+      test.delete_at(@error_hash['Extraneous Empty Line Detected'].index(line_num))
+    @indent -= 2 if @block_count.zero?
   end
 end

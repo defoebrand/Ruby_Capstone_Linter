@@ -40,8 +40,11 @@ end
 }
 
 @reserved_words = [/def/i, /if/i, /do/i, /class/i]
-# @block_word_reg = [/def/i, /if/i, /do/i]
-
-@indent = 0
 
 @timer = 0
+
+@block_start = false
+@block_end = false
+@reserved_word_count = 0
+@block_count = 0
+@indent = 0
