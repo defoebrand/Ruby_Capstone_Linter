@@ -2,7 +2,6 @@ require_relative '../lib/file_reader'
 
 def open_linter(filepath)
   @current_file = LintFile.new(filepath)
-  @current_file.read_lines
   @error_hash = {
     'Trailing Whitespace Detected' => [],
     'Excess Whitespace Detected' => [],
@@ -19,20 +18,18 @@ def open_linter(filepath)
     'Missing [ Detected' => [],
     'Missing ] Detected' => []
   }
-
   @tags_hash = {
     '\{' => '\}',
     '\(' => '\)',
     '\[' => '\]'
   }
-
   @reserved_words = [/def/i, /if/i, /do/i, /class/i]
-
   @block_start = false
   @block_end = false
   @reserved_word_count = 0
   @nest_count = 0
   @indent = 0
+  @current_file.read_lines
   check_for_errors
 end
 
