@@ -6,6 +6,8 @@ This project was compiled by Brandon in the Ruby section of the Microverse cours
 
 This linter performs the following tests:
 
+[Trailing Whitespace](#missing-final-closingstatement)
+
 ###### Trailing Whitespace:
 
 ![Trailing Whitespace](imgs/trailing_space.png)

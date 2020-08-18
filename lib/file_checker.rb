@@ -1,11 +1,43 @@
-require './lib/file_reader'
+require_relative '../lib/file_reader'
 
-def open_linter(filepath = nil)
+def open_linter(filepath)
   @current_file = LintFile.new(filepath)
   @current_file.read_lines
+  @error_hash = {
+    'Trailing Whitespace Detected' => [],
+    'Excess Whitespace Detected' => [],
+    'Extraneous Empty Line Detected' => [],
+    'Missing Empty Line Detected' => [],
+    'Indentation Error Detected' => [],
+    'Missing Closing Statement Detected' => [],
+    'Missing Final Closing Statement Detected' => [],
+    'Incorrect Capitalization of Reserved Word Detected' => [],
+    'Missing { Detected' => [],
+    'Missing } Detected' => [],
+    'Missing ( Detected' => [],
+    'Missing ) Detected' => [],
+    'Missing [ Detected' => [],
+    'Missing ] Detected' => []
+  }
+
+  @tags_hash = {
+    '\{' => '\}',
+    '\(' => '\)',
+    '\[' => '\]'
+  }
+
+  @reserved_words = [/def/i, /if/i, /do/i, /class/i]
+
+  @block_start = false
+  @block_end = false
+  @reserved_word_count = 0
+  @nest_count = 0
+  @indent = 0
   check_for_errors
 end
 
+ private
+ 
 def check_for_errors
   @current_file.file_lines.length.times do |line_num|
     capture_block(line_num)

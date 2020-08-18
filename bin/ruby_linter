@@ -1,5 +1,7 @@
+#!/usr/bin/env ruby
+
 require 'colorize'
-require './lib/file_checker'
+require_relative '../lib/file_checker'
 
 puts 'Hello! This is a simple linter for Ruby'.bold
 sleep(0.375)
