@@ -1,4 +1,7 @@
-require './lib/file_checker'
+#!/usr/bin/env ruby
+
+require 'colorize'
+require_relative '../lib/file_checker'
 
 puts 'Hello! This is a simple linter for Ruby'
 sleep(0.375)
@@ -15,16 +18,16 @@ if @errors.length.zero?
   puts ' Congratulations! No errors were detected '
 else
   if @errors.length == 1
-    puts " A total of #{@errors.uniq.length} error has been found on the following line "
+    puts " A total of #{@errors.length} error has been found on the following line "
   else
-    puts " A total of #{@errors.uniq.length} errors have been found on the following lines "
+    puts " A total of #{@errors.length} errors have been found on the following lines "
   end
   sleep(0.5)
   @errors.uniq.length.times do |ind|
     puts ''
-    print "  Line  #{@errors.sort.uniq[ind]} has the following alert(s):"
+    puts "  Line  #{@errors.sort.uniq[ind]} has the following alert(s):"
     @error_hash.each do |key, value|
-      print "    - #{key}" if value.any?(@errors.sort.uniq[ind])
+      puts "    - #{key}" if value.any?(@errors.sort.uniq[ind])
     end
     sleep(0.25)
   end
