@@ -7,7 +7,7 @@ describe Enumerable do
   let(:more_than_one) { proc { |x| x > 1 } }
   let(:not_one) { proc { |x| x != 1 } }
 
-  describe '#LintFile #initialize' do
+  describe 'file_reader #initialize' do
     it 'returns a file instance' do
       expect(test_file.scan_file.class).to eql(original_file.class)
     end
@@ -16,7 +16,7 @@ describe Enumerable do
     end
   end
 
-  describe '#LintFile read_lines' do
+  describe 'file_reader read_lines' do
     it 'returns an array' do
       test_file.read_lines
       expect(file_lines.class).to eql(Array)
@@ -103,19 +103,11 @@ describe Enumerable do
   describe 'file_checker #check_indentation' do
     it 'returns an error code if a line is found with incorrect indentation' do
       open_linter('./assets/bad_code.rb')
-      expect(@error_hash['Indentation Error Detected'].include?(1)).to eql(true)
+      expect(@error_hash['Indentation Error Detected'].include?([1].sample)).to eql(true)
     end
     it "doesn't return an error code unless a line is found with incorrect indentation" do
       open_linter('./assets/bad_code.rb')
-      expect(@error_hash['Indentation Error Detected'].include?(2)).not_to eql(true)
-    end
-    it 'returns an error code if a line is found with incorrect indentation' do
-      open_linter('./assets/bad_code.rb')
-      expect(@error_hash['Indentation Error Detected'].include?(27)).to eql(true)
-    end
-    it "doesn't return an error code unless a line is found with incorrect indentation" do
-      open_linter('./assets/bad_code.rb')
-      expect(@error_hash['Indentation Error Detected'].include?(28)).not_to eql(true)
+      expect(@error_hash['Indentation Error Detected'].include?([2].sample)).not_to eql(true)
     end
   end
 
@@ -128,9 +120,6 @@ describe Enumerable do
       open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing { Detected'].include?(16)).not_to eql(true)
     end
-  end
-
-  describe 'file_checker #check_tags' do
     it 'returns an error code if a line is found with a mismatched } bracket' do
       open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing } Detected'].include?(16)).to eql(true)
@@ -139,9 +128,6 @@ describe Enumerable do
       open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing } Detected'].include?(17)).not_to eql(true)
     end
-  end
-
-  describe 'file_checker #check_tags' do
     it 'returns an error code if a line is found with a mismatched [ bracket' do
       open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing [ Detected'].include?(2)).to eql(true)
@@ -150,9 +136,6 @@ describe Enumerable do
       open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing [ Detected'].include?(7)).not_to eql(true)
     end
-  end
-
-  describe 'file_checker #check_tags' do
     it 'returns an error code if a line is found with a mismatched ] bracket' do
       open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing ] Detected'].include?(7)).to eql(true)
@@ -161,9 +144,6 @@ describe Enumerable do
       open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing ] Detected'].include?(2)).not_to eql(true)
     end
-  end
-
-  describe 'file_checker #check_tags' do
     it 'returns an error code if a line is found with a mismatched ( bracket' do
       open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing ( Detected'].include?(26)).to eql(true)
@@ -172,9 +152,6 @@ describe Enumerable do
       open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing ( Detected'].include?(25)).not_to eql(true)
     end
-  end
-
-  describe 'file_checker #check_tags' do
     it 'returns an error code if a line is found with a mismatched ) bracket' do
       open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing ) Detected'].include?(25)).to eql(true)
@@ -196,7 +173,7 @@ describe Enumerable do
     end
   end
 
-  describe 'ruby_linter #@error_hash' do
+  describe 'ruby_linter @error_hash' do
     it 'collects correct total number of errors' do
       open_linter('./assets/bad_code.rb')
       expect(@error_hash.values.flatten.count).to eql(16)
