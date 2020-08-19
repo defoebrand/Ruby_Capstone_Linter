@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'colorize'
 require_relative '../lib/file_checker'
 
 puts 'Hello! This is a simple linter for Ruby'
