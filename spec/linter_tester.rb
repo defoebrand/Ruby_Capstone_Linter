@@ -7,8 +7,6 @@ describe Enumerable do
   let(:more_than_one) { proc { |x| x > 1 } }
   let(:not_one) { proc { |x| x != 1 } }
 
-  # = = = file_reader tests = = = = =
-
   describe '#LintFile #initialize' do
     it 'returns a file instance' do
       expect(test_file.scan_file.class).to eql(original_file.class)
@@ -38,10 +36,6 @@ describe Enumerable do
     end
   end
 
-  # = = = file_checker tests = = = = =
-
-  # = = # = = final_closing_statement = = # = = #
-
   describe 'file_checker #check_for_errors' do
     it 'returns an error code if there are more opening words than end statements' do
       open_linter('./assets/bad_code.rb')
@@ -53,7 +47,6 @@ describe Enumerable do
       expect(@error_hash['Missing Final Closing Statement Detected'].count).not_to eql(more_than_one)
     end
   end
-  # = = # = = capture_block = = # = = #
 
   describe 'file_checker #capture_block' do
     it 'returns an error code if a method block is nested inside another method block' do
@@ -65,7 +58,6 @@ describe Enumerable do
       expect(@error_hash['Missing Closing Statement Detected'].include?(13)).not_to eql(true)
     end
   end
-  # = = # = = check_whitespaces = = # = = #
 
   describe 'file_checker #check_whitespaces' do
     it 'returns an error code if a line has more than one space between words' do
@@ -86,8 +78,6 @@ describe Enumerable do
     end
   end
 
-  # = = # = = check_for_extra_lines = = # = = #
-
   describe 'file_checker #check_for_extra_lines' do
     it "returns an error code if a line isn't expected to be empty but is" do
       open_linter('./assets/bad_code.rb')
@@ -99,8 +89,6 @@ describe Enumerable do
     end
   end
 
-  # = = # = = check_for_missing_lines = = # = = #
-
   describe 'file_checker #check_for_missing_lines' do
     it "returns an error code if a line is expected to be empty but isn't" do
       open_linter('./assets/bad_code.rb')
@@ -111,8 +99,6 @@ describe Enumerable do
       expect(@error_hash['Missing Empty Line Detected'].include?(9)).not_to eql(true)
     end
   end
-
-  # = = # = = check_indentation = = # = = #
 
   describe 'file_checker #check_indentation' do
     it 'returns an error code if a line is found with incorrect indentation' do
@@ -132,8 +118,6 @@ describe Enumerable do
       expect(@error_hash['Indentation Error Detected'].include?(28)).not_to eql(true)
     end
   end
-
-  # = = # = = check_tags = = # = = #
 
   describe 'file_checker #check_tags' do
     it 'returns an error code if a line is found with a mismatched { bracket' do
@@ -201,8 +185,6 @@ describe Enumerable do
     end
   end
 
-  # = = # = = check_capitalization = = # = = #
-
   describe 'file_checker #check_capitalization' do
     it 'returns an error code if a line is found with capitalization of a reserved word not in all lowercase' do
       open_linter('./assets/bad_code.rb')
@@ -213,8 +195,6 @@ describe Enumerable do
       expect(@error_hash['Incorrect Capitalization of Reserved Word Detected'].include?(not_one)).not_to eql(true)
     end
   end
-
-  # = = = ruby_linter tests = = = = =
 
   describe 'ruby_linter #@error_hash' do
     it 'collects correct total number of errors' do

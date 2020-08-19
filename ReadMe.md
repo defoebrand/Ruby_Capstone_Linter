@@ -93,7 +93,7 @@ To get your own copy of this project simply clone the repository to your local m
 
 [![Run on Repl.it](https://repl.it/badge/github/defoebrand/Ruby_Capstone_Linter)](https://repl.it/github/defoebrand/Ruby_Capstone_Linter)
 
--   **Note**: Repl.It does not currently support colors so the User Experience may differ between testing online and testing locally.
+-   **Note**: Repl.It does not currently support colors so the User Experience will differ between testing online and testing locally.
 
 ## To Test with Rspec
 
