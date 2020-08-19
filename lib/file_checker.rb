@@ -1,10 +1,26 @@
-require './lib/file_reader'
+require_relative '../lib/file_reader'
 
-def open_linter(filepath = nil)
+def open_linter(filepath)
   @current_file = LintFile.new(filepath)
+  @error_hash = {
+    'Trailing Whitespace Detected' => [], 'Excess Whitespace Detected' => [], 'Extraneous Empty Line Detected' => [],
+    'Missing Empty Line Detected' => [], 'Indentation Error Detected' => [], 'Missing Closing Statement Detected' => [],
+    'Missing Final Closing Statement Detected' => [], 'Incorrect Capitalization of Reserved Word Detected' => [],
+    'Missing { Detected' => [], 'Missing } Detected' => [], 'Missing ( Detected' => [],
+    'Missing ) Detected' => [], 'Missing [ Detected' => [], 'Missing ] Detected' => []
+  }
+  @tags_hash = { '\{' => '\}', '\(' => '\)', '\[' => '\]' }
+  @reserved_words = [/def/i, /if/i, /do/i, /class/i]
+  @block_start = false
+  @block_end = false
+  @reserved_word_count = 0
+  @nest_count = 0
+  @indent = 0
   @current_file.read_lines
   check_for_errors
 end
+
+private
 
 def check_for_errors
   @current_file.file_lines.length.times do |line_num|
@@ -73,17 +89,19 @@ def double_error(line_num)
     @indent -= 2 if @nest_count.zero?
   end
   @block_end = false
-  @reserved_word_count -= 1
   @nest_count -= 1
   @indent -= 2 if @nest_count.zero?
 end
 
 def check_whitespaces(line_num)
-  if @current_file.file_lines[line_num].string.match?(/\S/)
-    if @current_file.file_lines[line_num].string.match?(/\s{1,}\#+.\n/)
-      @error_hash['Trailing Whitespace Detected'] << line_num + 1
-    end
-  elsif @current_file.file_lines[line_num].string.match?(/\w+\s{2,}\w+/)
+  unless @current_file.file_lines[line_num].string.match?(/\S/) &&
+         !@current_file.file_lines[line_num].string.match?(/^\s*\#+/)
+    return
+  end
+
+  if @current_file.file_lines[line_num].string.match?(/\s{1,}\n/)
+    @error_hash['Trailing Whitespace Detected'] << line_num + 1
+  elsif @current_file.file_lines[line_num].string.match?(/^\s*\w+\s{2,}\w+$/)
     @error_hash['Excess Whitespace Detected'] << line_num + 1
   end
 end
