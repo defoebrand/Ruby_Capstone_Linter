@@ -89,17 +89,20 @@ def double_error(line_num)
     @indent -= 2 if @nest_count.zero?
   end
   @block_end = false
-  @reserved_word_count -= 1
+  # @reserved_word_count -= 1
   @nest_count -= 1
   @indent -= 2 if @nest_count.zero?
 end
 
 def check_whitespaces(line_num)
-  if @current_file.file_lines[line_num].string.match?(/\S/)
-    if @current_file.file_lines[line_num].string.match?(/\s{1,}\n/)
-      @error_hash['Trailing Whitespace Detected'] << line_num + 1
-    end
-  elsif @current_file.file_lines[line_num].string.match?(/\w+\s{2,}\w+/)
+  unless @current_file.file_lines[line_num].string.match?(/\S/) &&
+         !@current_file.file_lines[line_num].string.match?(/^\s*\#+/)
+    return
+  end
+
+  if @current_file.file_lines[line_num].string.match?(/\s{1,}\n/)
+    @error_hash['Trailing Whitespace Detected'] << line_num + 1
+  elsif @current_file.file_lines[line_num].string.match?(/^\s*\w+\s{2,}\w+$/)
     @error_hash['Excess Whitespace Detected'] << line_num + 1
   end
 end

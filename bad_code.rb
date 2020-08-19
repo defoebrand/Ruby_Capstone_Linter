@@ -25,10 +25,8 @@
     test_arr.count(2
     test_arr.count2)
       p "I'm a beautiful }! butte]rfly)!"
-  # end  
+      #end
 end
-
-#end   
 
 "[]"
 "()"

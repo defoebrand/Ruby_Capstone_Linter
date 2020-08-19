@@ -1,7 +1,7 @@
 require 'strscan'
 
 class LintFile
-  attr_reader :scan_file, :file_lines, :error_hash
+  attr_reader :scan_file, :file_lines
   def initialize(filepath)
     @scan_file = File.open(filepath)
     @file_lines = []

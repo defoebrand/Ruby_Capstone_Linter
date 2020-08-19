@@ -53,10 +53,6 @@ Particularly noteworthy is the active error correction for when one error comes 
 -   Ubuntu
 -   Rubocop
 
-## Try It on Repl.It
-
-[![Run on Repl.it](https://repl.it/badge/github/defoebrand/Ruby_Capstone_Linter)](https://repl.it/github/defoebrand/Ruby_Capstone_Linter)
-
 ## Prerequisities
 
 To get this project up and running locally, you must already have ruby installed on your computer.
@@ -94,6 +90,11 @@ _bundle install_
 **Step 2**: Click run.
 
 **Step 3**: When prompted, enter the relative path of the _bad_code_ file as described above under Testing Locally. Edit the file as you see fit and test for any errors listed in the tests outlined above. If you find any incorrect errors, please submit an issue.
+
+
+## Try It on Repl.It
+
+[![Run on Repl.it](https://repl.it/badge/github/defoebrand/Ruby_Capstone_Linter)](https://repl.it/github/defoebrand/Ruby_Capstone_Linter)
 
 -   **Note**: Repl.It does not currently support colors so the User Experience may differ between testing online and testing locally.
 
