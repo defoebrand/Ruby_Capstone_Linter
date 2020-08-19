@@ -89,7 +89,6 @@ def double_error(line_num)
     @indent -= 2 if @nest_count.zero?
   end
   @block_end = false
-  # @reserved_word_count -= 1
   @nest_count -= 1
   @indent -= 2 if @nest_count.zero?
 end

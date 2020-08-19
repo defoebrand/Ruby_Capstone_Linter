@@ -1,10 +1,8 @@
-# spec/linter_tester.rb
-
 require_relative '../lib/file_checker.rb'
 
 describe Enumerable do
-  let(:test_file) { LintFile.new('./bad_code.rb') }
-  let(:original_file) { File.open('./bad_code.rb') }
+  let(:test_file) { LintFile.new('./assets/bad_code.rb') }
+  let(:original_file) { File.open('./assets/bad_code.rb') }
   let(:file_lines) { test_file.file_lines }
   let(:more_than_one) { proc { |x| x > 1 } }
   let(:not_one) { proc { |x| x != 1 } }
@@ -46,12 +44,12 @@ describe Enumerable do
 
   describe 'file_checker #check_for_errors' do
     it 'returns an error code if there are more opening words than end statements' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       test_file.read_lines
       expect(@error_hash['Missing Final Closing Statement Detected'].include?(file_lines.length)).to eql(true)
     end
     it "doesn't return an error code unless there are more opening words than end statements" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing Final Closing Statement Detected'].count).not_to eql(more_than_one)
     end
   end
@@ -59,11 +57,11 @@ describe Enumerable do
 
   describe 'file_checker #capture_block' do
     it 'returns an error code if a method block is nested inside another method block' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing Closing Statement Detected'].include?(12)).to eql(true)
     end
     it "doesn't return an error code unless a method block is nested inside another method block" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing Closing Statement Detected'].include?(13)).not_to eql(true)
     end
   end
@@ -71,19 +69,19 @@ describe Enumerable do
 
   describe 'file_checker #check_whitespaces' do
     it 'returns an error code if a line has more than one space between words' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Excess Whitespace Detected'].include?(14)).to eql(true)
     end
     it "doesn't return an error code unless a line has more than one space between words" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Excess Whitespace Detected'].include?(12)).not_to eql(true)
     end
     it 'returns an error code if a line has a space between the last character and the end of the line' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Trailing Whitespace Detected'].include?(16)).to eql(true)
     end
     it "doesn't return an error code unless a line has a space between the last character and the end of the line" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Trailing Whitespace Detected'].include?(19)).not_to eql(true)
     end
   end
@@ -92,11 +90,11 @@ describe Enumerable do
 
   describe 'file_checker #check_for_extra_lines' do
     it "returns an error code if a line isn't expected to be empty but is" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Extraneous Empty Line Detected'].include?(3)).to eql(true)
     end
     it "doesn't return an error code unless a line isn't expected to be empty and is" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Extraneous Empty Line Detected'].include?(4)).not_to eql(true)
     end
   end
@@ -105,11 +103,11 @@ describe Enumerable do
 
   describe 'file_checker #check_for_missing_lines' do
     it "returns an error code if a line is expected to be empty but isn't" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing Empty Line Detected'].include?(10)).to eql(true)
     end
     it "doesn't return an error code if a line is expected to be empty and is" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing Empty Line Detected'].include?(9)).not_to eql(true)
     end
   end
@@ -118,19 +116,19 @@ describe Enumerable do
 
   describe 'file_checker #check_indentation' do
     it 'returns an error code if a line is found with incorrect indentation' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Indentation Error Detected'].include?(1)).to eql(true)
     end
     it "doesn't return an error code unless a line is found with incorrect indentation" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Indentation Error Detected'].include?(2)).not_to eql(true)
     end
     it 'returns an error code if a line is found with incorrect indentation' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Indentation Error Detected'].include?(27)).to eql(true)
     end
     it "doesn't return an error code unless a line is found with incorrect indentation" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Indentation Error Detected'].include?(28)).not_to eql(true)
     end
   end
@@ -139,66 +137,66 @@ describe Enumerable do
 
   describe 'file_checker #check_tags' do
     it 'returns an error code if a line is found with a mismatched { bracket' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing { Detected'].include?(17)).to eql(true)
     end
     it "doesn't return an error code unless a line is found with a mismatched { bracket" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing { Detected'].include?(16)).not_to eql(true)
     end
   end
 
   describe 'file_checker #check_tags' do
     it 'returns an error code if a line is found with a mismatched } bracket' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing } Detected'].include?(16)).to eql(true)
     end
     it "doesn't return an error code unless a line is found with a mismatched } bracket" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing } Detected'].include?(17)).not_to eql(true)
     end
   end
 
   describe 'file_checker #check_tags' do
     it 'returns an error code if a line is found with a mismatched [ bracket' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing [ Detected'].include?(2)).to eql(true)
     end
     it "doesn't return an error code unless a line is found with a mismatched [ bracket" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing [ Detected'].include?(7)).not_to eql(true)
     end
   end
 
   describe 'file_checker #check_tags' do
     it 'returns an error code if a line is found with a mismatched ] bracket' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing ] Detected'].include?(7)).to eql(true)
     end
     it "doesn't return an error code unless a line is found with a mismatched ] bracket" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing ] Detected'].include?(2)).not_to eql(true)
     end
   end
 
   describe 'file_checker #check_tags' do
     it 'returns an error code if a line is found with a mismatched ( bracket' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing ( Detected'].include?(26)).to eql(true)
     end
     it "doesn't return an error code unless a line is found with a mismatched ( bracket" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing ( Detected'].include?(25)).not_to eql(true)
     end
   end
 
   describe 'file_checker #check_tags' do
     it 'returns an error code if a line is found with a mismatched ) bracket' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing ) Detected'].include?(25)).to eql(true)
     end
     it "doesn't return an error code unless a line is found with a mismatched ) bracket" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Missing ) Detected'].include?(26)).not_to eql(true)
     end
   end
@@ -207,11 +205,11 @@ describe Enumerable do
 
   describe 'file_checker #check_capitalization' do
     it 'returns an error code if a line is found with capitalization of a reserved word not in all lowercase' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Incorrect Capitalization of Reserved Word Detected'].include?(1)).to eql(true)
     end
     it "doesn't return an error code if all reserved words are lowercase" do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash['Incorrect Capitalization of Reserved Word Detected'].include?(not_one)).not_to eql(true)
     end
   end
@@ -220,11 +218,11 @@ describe Enumerable do
 
   describe 'ruby_linter #@error_hash' do
     it 'collects correct total number of errors' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash.values.flatten.count).to eql(16)
     end
     it 'does not collect lines without errors' do
-      open_linter('./bad_code.rb')
+      open_linter('./assets/bad_code.rb')
       expect(@error_hash.values.flatten.count).not_to eql(5)
     end
   end
