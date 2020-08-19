@@ -6,7 +6,7 @@ This project was compiled by Brandon in the Ruby section of the Microverse cours
 
 This linter performs the following tests:
 
-[Trailing Whitespace](#missing-final-closingstatement)
+
 
 ###### Trailing Whitespace:
 
@@ -72,6 +72,10 @@ _git clone <https://github.com/defoebrand/Ruby_Capstone_Linter.git>_
 **Step 2**: Direct a terminal into the directory of the cloned repository by typing:
 
 _cd Ruby_Capstone_Linter_
+
+**Step 3**: To ensure all necessary dependencies are present, run the following command:
+
+_bundle install_
 
 ## To Test Locally
 

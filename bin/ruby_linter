@@ -18,18 +18,18 @@ if @errors.length.zero?
   puts ' Congratulations! No errors were detected '.bold.blue.on_green
 else
   if @errors.length == 1
-    puts " A total of #{@errors.uniq.length} error has been found on the following line ".bold.red.on_light_white
+    puts " A total of #{@errors.length} error has been found on the following line ".bold.red.on_light_white
   else
-    puts " A total of #{@errors.uniq.length} errors have been found on the following lines ".bold.red.on_light_white
+    puts " A total of #{@errors.length} errors have been found on the following lines ".bold.red.on_light_white
   end
   sleep(0.5)
   @errors.uniq.length.times do |ind|
     puts ''
-    print "  Line  #{@errors.sort.uniq[ind]} has the following alert(s):".bold.red
+    puts "  Line  #{@errors.sort.uniq[ind]} has the following alert(s):".bold.red
     @error_hash.each do |key, value|
-      print "    - #{key}".magenta if value.any?(@errors.sort.uniq[ind])
+      puts "    - #{key}".magenta if value.any?(@errors.sort.uniq[ind])
     end
-    sleep(0.25)
+    sleep(0.375)
   end
   puts ''
 end

@@ -3,26 +3,13 @@ require_relative '../lib/file_reader'
 def open_linter(filepath)
   @current_file = LintFile.new(filepath)
   @error_hash = {
-    'Trailing Whitespace Detected' => [],
-    'Excess Whitespace Detected' => [],
-    'Extraneous Empty Line Detected' => [],
-    'Missing Empty Line Detected' => [],
-    'Indentation Error Detected' => [],
-    'Missing Closing Statement Detected' => [],
-    'Missing Final Closing Statement Detected' => [],
-    'Incorrect Capitalization of Reserved Word Detected' => [],
-    'Missing { Detected' => [],
-    'Missing } Detected' => [],
-    'Missing ( Detected' => [],
-    'Missing ) Detected' => [],
-    'Missing [ Detected' => [],
-    'Missing ] Detected' => []
+    'Trailing Whitespace Detected' => [], 'Excess Whitespace Detected' => [], 'Extraneous Empty Line Detected' => [],
+    'Missing Empty Line Detected' => [], 'Indentation Error Detected' => [], 'Missing Closing Statement Detected' => [],
+    'Missing Final Closing Statement Detected' => [], 'Incorrect Capitalization of Reserved Word Detected' => [],
+    'Missing { Detected' => [], 'Missing } Detected' => [], 'Missing ( Detected' => [],
+    'Missing ) Detected' => [], 'Missing [ Detected' => [], 'Missing ] Detected' => []
   }
-  @tags_hash = {
-    '\{' => '\}',
-    '\(' => '\)',
-    '\[' => '\]'
-  }
+  @tags_hash = { '\{' => '\}', '\(' => '\)', '\[' => '\]' }
   @reserved_words = [/def/i, /if/i, /do/i, /class/i]
   @block_start = false
   @block_end = false
@@ -33,8 +20,8 @@ def open_linter(filepath)
   check_for_errors
 end
 
- private
- 
+private
+
 def check_for_errors
   @current_file.file_lines.length.times do |line_num|
     capture_block(line_num)
@@ -109,7 +96,7 @@ end
 
 def check_whitespaces(line_num)
   if @current_file.file_lines[line_num].string.match?(/\S/)
-    if @current_file.file_lines[line_num].string.match?(/\s{1,}\#+.\n/)
+    if @current_file.file_lines[line_num].string.match?(/\s{1,}\n/)
       @error_hash['Trailing Whitespace Detected'] << line_num + 1
     end
   elsif @current_file.file_lines[line_num].string.match?(/\w+\s{2,}\w+/)
