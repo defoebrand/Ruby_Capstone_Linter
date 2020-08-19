@@ -2,7 +2,7 @@ AllCops:
   Exclude:
     - "Guardfile"
     - "Rakefile"
-    - "./bad_code.rb"
+    - ".assets/bad_code.rb"
 
   DisplayCopNames: true
 
